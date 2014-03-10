@@ -1,72 +1,47 @@
-#include<iostream>
-#include<string>
+/*
+思路：
+数学解法
 
-using namespace std;
+在n!个排列中，第一位的元素总是(n-1)!一组出现的，也就说如果p = k / (n-1)!，那么排列的最开始一个元素一定是nums[p]。
 
+假设有n个元素，第K个permutation是
+a1, a2, a3, .....   ..., an
+那么a1是哪一个数字呢？
+那么这里，我们把a1去掉，那么剩下的permutation为
+a2, a3, .... .... an, 共计n-1个元素。 n-1个元素共有(n-1)!组排列，那么这里就可以知道
+设变量K1 = K
+a1 = K1 / (n-1)!
+同理，a2的值可以推导为
+a2 = K2 / (n-2)!
+K2 = K1 % (n-1)!
+ .......
+a(n-1) = K(n-1) / 1!
+K(n-1) = K(n-2) /2!
+an = K(n-1)
+*/
 class Solution {
-private:
-    void CopyString(const char* source, char* target)
-    {
-        while(*source != '\0')
-        {
-            *target = *source;
-            target++;
-            source++;
-        }
-        target = '\0';
-    }
-    void Swap(char& a, char& b)
-    {
-        a = a ^ b;
-        b = a ^ b;
-        a = a ^ b;
-    }
-    void BuildPermutation(char* source_str, int len, int start, int& k, bool& is_found, char* target_str)
-    {
-        if(start == len-1)
-        {
-            k--;
-            if(k == 0)
-            {
-                is_found = true;
-                CopyString(source_str, target_str);
-            }
-            return;
-        }
-        for(int i = start; i < len && !is_found; i++)
-        {
-            Swap(source_str[start], source_str[i]);
-            BuildPermutation(source_str, len, i+1, k, is_found, target_str);
-            Swap(source_str[start], source_str[i]);
-        }
-    }
 public:
     string getPermutation(int n, int k) {
-        char* source_str = new char[n+1];
+        int numbers[n];
+        int permu_num = 1;
         for(int i = 0; i < n; i++)
         {
-            source_str[i] = '0' + i + 1;
+            numbers[i] = i+1;
+            permu_num *= i+1;
         }
-        source_str[n] = '\0';
-        char* target_str = new char[n+1];
-        bool is_found = false;
-        BuildPermutation(source_str, n, 0, k, is_found, target_str);
-        string str(target_str);
-        delete[] source_str;
-        delete[] target_str;
+        k--; //注意,k必须自减1,因为 numbers[] 是从0开始的！
+        string str = "";
+        for(int i = 0; i < n; i++)
+        {
+            permu_num /= (n-i);
+            int selected_index = k / permu_num;
+            str += '0' + numbers[selected_index];
+            for(int j = selected_index; j < n -1 - i; j++) //注意，selected_index是剩下的未选元素的第selected_index个,顺序是升序。
+            {
+                numbers[j] = numbers[j+1];
+            }
+            k = k % permu_num; //更新k的值
+        }
         return str;
     }
 };
-
-void Test()
-{
-    Solution s;
-    string str = s.getPermutation(1,1);
-    cout << str << endl;
-}
-
-int main()
-{
-    Test();
-    return 0;
-}
