@@ -1,0 +1,2 @@
+output : distinct_subsequences.cpp
+	g++ -o ouput -g -Wall distinct_subsequences.cpp
