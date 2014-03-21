@@ -1,0 +1,2 @@
+output : flatten_binary_tree_to_linked_list_2.cpp
+	g++ -o ouput -g -Wall flatten_binary_tree_to_linked_list_2.cpp

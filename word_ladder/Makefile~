@@ -1,0 +1,2 @@
+output : word_ladder.cpp
+	g++ -o ouput -g -Wall word_ladder.cpp
