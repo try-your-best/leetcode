@@ -1,0 +1,2 @@
+output : letter_combinations_of_a_phone_number.cpp
+	g++ -o ouput -g -Wall letter_combinations_of_a_phone_number.cpp

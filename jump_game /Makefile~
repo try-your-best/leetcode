@@ -1,0 +1,2 @@
+output : jump_game_negative_2.cpp
+	g++ -o ouput -g -Wall jump_game_negative_2.cpp

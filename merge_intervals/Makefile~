@@ -1,0 +1,2 @@
+output : merge_intervals.cpp
+	g++ -o ouput -g -Wall merge_intervals.cpp
