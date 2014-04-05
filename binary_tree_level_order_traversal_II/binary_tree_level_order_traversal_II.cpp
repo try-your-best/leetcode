@@ -1,0 +1,60 @@
+/*
+思路：BFS，按题目要求，每次从vector的前端插入当前层的节点。
+*/
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    void BFS(TreeNode *p_node, vector<vector<int> >& results)
+    {
+        queue<TreeNode *> node_queue;
+        node_queue.push(p_node);
+        map<TreeNode *, int> node_level;
+        node_level[p_node] = 0;
+        int last_level = 0;
+        vector<int> cur_level_nodes;
+        while(!node_queue.empty())
+        {
+            TreeNode *p_cur = node_queue.front();
+            node_queue.pop();
+            if(last_level == node_level[p_cur])
+            {
+                cur_level_nodes.push_back(p_cur->val);
+            }
+            else
+            {
+                results.insert(results.begin(), cur_level_nodes);
+                cur_level_nodes.clear();
+                cur_level_nodes.push_back(p_cur->val);
+                last_level = node_level[p_cur];
+            }
+            if(p_cur->left != NULL)
+            {
+                node_queue.push(p_cur->left);
+                node_level[p_cur->left] = node_level[p_cur]+1;
+            }
+            if(p_cur->right != NULL)
+            {
+                node_queue.push(p_cur->right);
+                node_level[p_cur->right] = node_level[p_cur]+1;
+            }
+        }
+        results.insert(results.begin(), cur_level_nodes);//注意收集最后一层的节点。
+    }
+    vector<vector<int> > levelOrderBottom(TreeNode *root) {
+        vector<vector<int> > results;
+        if(root == NULL)
+        {
+            return results;
+        }
+        BFS(root, results);
+        return results;
+    }
+};

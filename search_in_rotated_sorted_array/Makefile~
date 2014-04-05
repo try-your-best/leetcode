@@ -1,0 +1,3 @@
+source_file = restore_IP_addresses.cpp
+output : ${source_file}
+	g++ -o ouput -g -Wall ${source_file}
