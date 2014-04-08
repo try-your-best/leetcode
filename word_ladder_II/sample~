@@ -1,0 +1,4 @@
+Input:	"red", "tax", ["ted","tex","red","tax","tad","den","rex","pee"]
+Output:	[["red","ted","tad","tax"],["red","ted","tex","tax"]]
+Expected:	[["red","ted","tad","tax"],["red","ted","tex","tax"],["red","rex","tex","tax"]]
+

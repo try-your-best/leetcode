@@ -1,0 +1,3 @@
+source_file = valid_palindrome.cpp
+output : ${source_file}
+	g++ -o ouput -g -Wall ${source_file}

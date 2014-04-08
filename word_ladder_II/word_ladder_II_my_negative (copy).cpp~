@@ -1,0 +1,175 @@
+/*
+在过大测试集的时候会死循环，不知为何。
+*/
+
+#include<iostream>
+#include<vector>
+#include<unordered_set>
+#include<unordered_map>
+#include<queue>
+#include<climits>
+#include<fstream>
+using namespace std;
+
+
+void Print(vector<vector<string> > &result)
+{
+    int row = result.size();
+    for(int i = 0; i < row; i++)
+    {
+        int column = result[i].size();
+        for(int j = 0; j < column; j++)
+        {
+            cout << result[i][j] << ",";
+        }
+        cout << endl;
+    }
+}
+
+void PrintFather(vector<string>  father)
+{
+    for(int i = 0; i < father.size(); i++)
+    {
+        cout << father[i] << ",";
+    }
+    cout << endl;
+}
+
+class Solution {
+private:
+    int m_target_depth;
+public:
+    void Swap(char& a, char &b)
+    {
+        if(&a == &b)
+        {
+            return;
+        }
+        a = a ^ b;
+        b = a ^ b;
+        a = a ^ b;
+    }
+    
+    void CollectResult(int cur_depth, string& word, unordered_map<string, vector<string> > &father, vector<string>& tmp, vector<vector<string> > &result)
+    {
+        if(cur_depth == m_target_depth)
+        {
+            if(father[word][0].compare("") == 0)
+            {
+                result.push_back(tmp);
+            }
+            return; 
+        }
+        int father_size =  father[word].size();
+        for(int i = 0; i < father_size; i++)
+        {
+            tmp.insert(tmp.begin(), father[word][i]);
+            string haha = father[word][i];
+            CollectResult(cur_depth+1, haha, father, tmp, result);
+            tmp.erase(tmp.begin());
+        }
+    }
+    int BFS(string &start, string &end, unordered_set<string> &dict, unordered_map<string, vector<string> > &father)
+    {
+        queue<string> words_queue; 
+        words_queue.push(start);
+        unordered_set<string> visited;//注意，访问起始点！
+        visited.insert(start);
+        unordered_map<string, int> word_level;
+        father[start].push_back("");
+        word_level[start] = 0;
+        int found_level = INT_MAX;
+        while(!words_queue.empty())
+        {
+            string cur_word = words_queue.front();
+            if(word_level[cur_word] > found_level)
+            {
+                break;
+            }
+            words_queue.pop();
+            int word_len = cur_word.length();
+            string tmp_word = cur_word;
+            for(int i = 0; i < word_len; i++)
+            {
+                for(char cur_char = 'a'; cur_char <= 'z'; cur_char++)
+                {
+                    if(cur_char == tmp_word[i])
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        Swap(cur_char, tmp_word[i]);
+                        if(tmp_word.compare(end) == 0)
+                        {
+                            father[end].push_back(cur_word);
+                            found_level = word_level[cur_word];
+                        }
+                        else if(start.compare(tmp_word) != 0 && dict.count(tmp_word) > 0)
+                        {
+                            father[tmp_word].push_back(cur_word); //记录节点所有的父亲，无论节点是否被访问过
+                            if(visited.count(tmp_word) == 0)
+                            {
+                                word_level[tmp_word] = word_level[cur_word]+1;
+                                words_queue.push(tmp_word);
+                                visited.insert(tmp_word);
+                            }
+                        }
+                        Swap(cur_char, tmp_word[i]);
+                    }
+                }
+            }
+        }
+        //cout << word_level["rex"] << endl;
+        return found_level;
+    }
+    vector<vector<string> > findLadders(string start, string end, unordered_set<string> &dict) {
+        vector<vector<string> > result;
+        unordered_map<string, vector<string> > father;
+        vector<string> tmp;
+        int found_level = BFS(start, end, dict, father); //注意 found_level;
+        tmp.push_back(end);
+        cout << found_level << endl;
+        PrintFather(father["tax"]);
+        m_target_depth = found_level+1;
+        CollectResult(0, end, father, tmp, result);
+        return result;
+    }
+};
+
+
+void Test()
+{
+   string start = "hot";
+   string end = "dog";
+   unordered_set<string> dict;
+   dict.insert("hot");
+   dict.insert("dog");
+   dict.insert("dot");
+   Solution s;
+   s.findLadders(start, end, dict);
+}
+
+void Test1()
+{
+    string start;
+    string end; 
+    unordered_set<string> dict;
+    ifstream fin("file.in");
+    fin >> start;
+    fin >> end;
+    string tmp;
+    while(fin >> tmp)
+    {
+        dict.insert(tmp);
+    }
+    Solution s;
+    vector< vector<string> > result = s.findLadders(start, end, dict);
+    Print(result);
+}
+
+int main()
+{
+    Test1();
+    return 0;
+}
