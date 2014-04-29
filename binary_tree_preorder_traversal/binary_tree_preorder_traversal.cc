@@ -1,0 +1,40 @@
+/*
+思路：先序遍历的非递归版本！！！有stack去模拟递归。一次A掉
+*/
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    void PreOrder(TreeNode *p_node, vector<int> &nodes)
+    {
+        stack<TreeNode *> node_stack; //用stack去模拟函数的递归！
+        while(p_node != NULL || !node_stack.empty())
+        {
+            while(p_node != NULL)
+            {
+                nodes.push_back(p_node->val);//体现先序遍历！
+                node_stack.push(p_node);
+                p_node = p_node->left;//访问做节点
+            }
+            if(!node_stack.empty())
+            {
+                p_node = node_stack.top();
+                node_stack.pop();
+                p_node = p_node->right;
+            }
+        }
+    }
+    
+    vector<int> preorderTraversal(TreeNode *root) {
+        vector<int> nodes;
+        PreOrder(root, nodes);
+        return nodes;
+    }
+};
