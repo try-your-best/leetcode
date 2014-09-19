@@ -33,7 +33,7 @@ public:
         if(left_len > 0)
         {
             //p_node->left = CreateNode(postorder, low+left_len-1, inorder, low, index-1);
-			//注意，不要定位下一个根节点时不要用low+left_len-1，因为low是针对inorder的参数！！！
+        	  //娉ㄦ剰锛屽畾浣嶄笅涓�涓牴鑺傜偣鏃朵笉瑕佺敤low+left_len-1锛屽洜涓簂ow鏄拡瀵筰norder鐨勫弬鏁帮紒锛侊紒
             p_node->left = CreateNode(postorder, root_index-right_len-1, inorder, low, index-1);
         }
         if(right_len > 0)

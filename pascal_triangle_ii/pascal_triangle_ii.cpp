@@ -1,0 +1,22 @@
+/*
+根据 Pascal's Triangle 的定义去求。
+一般是 triangle[i] = triangle[i] + triangle[i-1];
+头和末尾节点需要特殊处理。
+triangle[0]始终为1。
+triangle[] 初始化为0,这样末尾节点也可以使用一般的处理方法。
+*/
+class Solution {
+public:
+    vector<int> getRow(int rowIndex) {
+        vector<int> triangle(rowIndex+1);
+        triangle[0] = 1;
+        for(int i =1 ; i <= rowIndex; ++i)
+        {
+            for(int j = i; j > 0; --j)
+            {
+                triangle[j] += triangle[j-1];
+            }
+        }
+        return triangle;
+    }
+};

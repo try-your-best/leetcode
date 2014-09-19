@@ -1,6 +1,7 @@
 /*
 思路：看trapping_rain_water.cpp
 时间O(n),空间O(n)
+这道题用到的思路和Candy是类似的。
 */
 #include<iostream>
 #include<vector>
