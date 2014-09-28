@@ -1,0 +1,56 @@
+class Solution {
+public:
+    string minWindow(string S, string T) {
+        int tSize = T.size();
+        vector<bool> expect(256);
+        for(int i = 0; i < tSize; ++i)
+        {
+            expect[T[i]] = true;
+        }
+        int curSize = 0;
+        int strSize = S.size();
+        vector<int> cur(256);
+        int lastStart = 0;
+        int minStart = 0;
+        int minEnd = 0;
+        int minLen = INT_MAX;
+        for(int i = 0; i < strSize; i++)
+        {
+            if(expect[S[i]])
+            {
+                if(cur[S[i]] == 0)
+                {
+                    ++curSize;
+                }
+                cur[S[i]]++;
+                if(curSize == tSize)
+                {
+                    int tmpStart = lastStart;
+                    while(curSize == tSize)
+                    {
+                        if(minLen > i-tmpStart+1)
+                        {
+                            minStart = tmpStart;
+                            minEnd = i;
+                            minLen = i-tmpStart+1;
+                        }
+                        if( expect[S[tmpStart]] == false)
+                        {
+                            ++tmpStart;
+                        }
+                        else
+                        {
+                            --cur[S[tmpStart]];
+                            if(cur[S[tmpStart]] == 0)
+                            {
+                                lastStart = tmpStart++;
+                                curSize--;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return S.substr(minStart, minEnd-minStart+1);
+    }
+};
