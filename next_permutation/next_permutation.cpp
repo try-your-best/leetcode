@@ -1,0 +1,43 @@
+/*
+解题思路：
+从右到左找到第一个降序的数，称为分界数，它的下标为分界下标。
+从右到左找到第一个大于分界数的数，称为被改变数。
+交换分界数与被改变数。
+分界下标右边所有的数倒置。
+想不通原因！
+参考
+http://fisherlei.blogspot.jp/2012/12/leetcode-next-permutation.html
+*/
+
+class Solution {
+public:
+    void nextPermutation(vector<int> &num) {
+        int size = num.size();
+        int index = -1; // set index to -1 in case the series are all decreasing.
+        for(int i = size-2; i >= 0; --i)
+        {
+            if(num[i] < num[i+1])
+            {
+                index = i;
+                break;
+            }
+        }
+        if(index >= 0)
+        {
+            for(int i = size-1; i >= 0; --i)
+            {
+                if(num[i] > num[index])// note, num[i] >= num[index] is error,like 1,5,1 will be 1,1,5, not 5,1,1
+                {
+                    swap(num[i], num[index]);
+                    break;
+                }
+            }
+        }
+        int low = index+1;
+        int high = size-1;
+        while(low < high)
+        {
+            swap(num[low++], num[high--]);
+        }
+    }
+};
